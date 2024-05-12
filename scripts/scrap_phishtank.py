@@ -3,9 +3,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import json
 
 # liste pour stocker les liens de phishing
-is_online_phish = []
+#is_online_phish = []
+data = []
 
 # ouvrir le navigateur Firefox
 driver = webdriver.Firefox()
@@ -35,7 +37,7 @@ search_button.click()
 # boucler sur les pages de résultats
 while True:
 
-    if len(is_online_phish) > 200: 
+    if len(data) > 50: 
     # enlever cette condition si vous voulez récupérer tous les liens de phishing valides de PhishTank
         break
 
@@ -54,9 +56,12 @@ while True:
         phishing_link_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "/html[1]/body[1]/div[2]/div[2]/div[1]/div[1]/div[3]/span[1]/b[1]")))
         phishing_link = phishing_link_element.text
 
-        # si le lien de phishing n'est pas déjà dans la liste is_online_phish, on l'ajoute
-        if phishing_link not in is_online_phish:
-            is_online_phish.append(phishing_link)
+        # si le lien de phishing n'est pas déjà dans le dico is_online_phish, on l'ajoute
+        if phishing_link not in data:
+            #is_online_phish.append(phishing_link)
+            #data[phishing_link] = 1 # 1 (Phishing) or 0 (Benign)
+            item={"text": phishing_link, "label": 1}
+            data.append(item)
     
     driver.close() # fermer la fenêtre
     driver.switch_to.window(driver.window_handles[0]) # retourner à la fenêtre principale
@@ -71,15 +76,10 @@ while True:
                               
 driver.quit() # fermer le navigateur
 
-print("phishing links count:", len(is_online_phish))
-print("10 first:")
-for i in is_online_phish[:10]:
-    print(i)
-print()
+print("phishing links count:", len(data))
 
-with open("is_online_phish.txt", "w") as f:
-    for link in is_online_phish:
-        f.write(link + "\n")
-print()
+json_object = json.dumps(data, indent=4)
+with open("data2.json", "w") as outfile:
+    outfile.write(json_object)
 
-print("phishing links saved to is_online_phish.txt")
+print("phishing links saved to data.json")
