@@ -23,6 +23,12 @@ Projet de constitution/exploitation de corpus dans le cadre du cours d'Outils de
         - train set : 7.16 MB
         - test set : 4.74 MB
     
-    - format du corpus : .parquet
+    - format du corpus : .parquet (s'apparente à un .csv compressé, permet de stocker des gros volumes de données)
 
 Créateur du corpus : datadrivenscience/
+
+## Création du nouveau corpus
+- scraping de du site d'IMDB avec selenium
+- création de dataclass pour stocker les données
+- sérialisation en JSON
+- plotting du corpus obtenu avec 3 figures disponibles dans plots/
