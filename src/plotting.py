@@ -89,7 +89,7 @@ class Plotter:
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
         #plt.show()
-        plt.savefig(self.path_plot + 'grouped_genre_distribution.png')
+        plt.savefig(self.path_plot + 'flat_genre_distribution.png')
 
 
     def plot_grouped_genre_distribution(self, df: DataFrame)-> None:
