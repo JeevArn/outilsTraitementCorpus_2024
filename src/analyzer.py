@@ -1,12 +1,21 @@
-from datastructures import Token, Sentence, Film
+"""Module pour le pos-tagging su corpus"""
+import spacy
 from spacy.language import Language
+from datastructures import Token, Sentence, Film
 
-def load_spacy():
-    import spacy
+def load_spacy()-> Language:
+    """Charger le modèle de langue spaCy
+
+    Returns
+    -------
+    Language
+        modèle de langue spaCy
+    """
     return spacy.load("fr_core_news_lg")
 
 def analyze_spacy(nlp: Language, film: Film)-> None:
-    """Pos-tagging du synopsis du film avec spaCy et stockage dans l'attribut analysis de la classe Film
+    """Pos-tagging du synopsis du film avec spaCy 
+    et stockage dans l'attribut analysis de la classe Film
 
     Parameters
     ----------
@@ -19,7 +28,6 @@ def analyze_spacy(nlp: Language, film: Film)-> None:
     -------
     None 
         modifie directement l'objet par référence et non pas par copie donc pas besoin de return
-
     """
     result=nlp(film.synopsis)
     film.analysis=[Sentence(
