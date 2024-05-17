@@ -49,10 +49,7 @@ def main():
     # Plotting
     if args.plot :
         plotter = Plotter(args.path_corpus, args.path_plot)
-        df = plotter.get_dataframe()
-        plotter.plot_flat_genre_distribution(df)
-        plotter.plot_grouped_genre_distribution(df)
-        plotter.plot_1st_genre_distribution(df)
+        plotter.all_plots()
 
 if __name__ == "__main__":
     main()

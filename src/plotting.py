@@ -9,7 +9,9 @@ commande avec les paths par défaut :
     python3 src/plotting.py
 """
 import argparse
+from collections import Counter
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from pandas import DataFrame
 
@@ -155,6 +157,112 @@ class Plotter:
         plt.savefig(self.path_plot + '1st_genre_distribution.png')
 
 
+    def plot_avg_token_per_genre(self, df: DataFrame) -> None:
+        """Créer un graphique de la moyenne du nombre de tokens des synopsis par genre
+
+        Parameters
+        ----------
+        df : DataFrame
+            Le corpus en dataframe obtenu avec get_dataframe
+        
+        Returns
+        -------
+        None
+        """
+        # calculer le nombre de tokens pour chaque synopsis en utilisant split()
+        df['num_tokens'] = df['synopsis'].apply(lambda x: len(str(x).split()))
+        # exploser la colonne 'genres' pour obtenir une ligne par genre et film
+        df_exploded = df.explode('genres')
+        # calculer la moyenne du nombre de tokens par genre
+        avg_tokens_per_genre = df_exploded.groupby('genres')['num_tokens'].mean()
+        # plotting
+        plt.figure(figsize=(10, 6))
+        avg_tokens_per_genre.plot(kind='bar', color='mediumseagreen')
+        plt.title('Average Number of Tokens per Genre')
+        plt.xlabel('Genres')
+        plt.ylabel('Average Number of Tokens')
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+        plt.savefig(self.path_plot + 'avg_token_per_genre.png')
+
+
+    def plot_avg_token_per_1st_genre(self, df: DataFrame) -> None:
+        """Créer un graphique de la moyenne du nombre de tokens des synopsis par genre
+        en ne prenant en compte que le premier genre de chaque film
+
+        Parameters
+        ----------
+        df : DataFrame
+            Le corpus en dataframe obtenu avec get_dataframe
+        
+        Returns
+        -------
+        None
+        """
+        # calculer le nombre de tokens pour chaque synopsis en utilisant split()
+        df['num_tokens'] = df['synopsis'].apply(lambda x: len(str(x).split()))
+        # prendre uniquement le premier genre de chaque liste de genres
+        df['first_genre'] = df['genres'].apply(lambda x: x[0])
+        # calculer la moyenne du nombre de tokens par premier genre
+        avg_tokens_per_1st_genre = df.groupby('first_genre')['num_tokens'].mean()
+        # plotting
+        plt.figure(figsize=(10, 6))
+        avg_tokens_per_1st_genre.plot(kind='bar', color='green')
+        plt.title('Average Number of Tokens per First Genre')
+        plt.xlabel('First Genre')
+        plt.ylabel('Average Number of Tokens')
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+        plt.savefig(self.path_plot + 'avg_token_per_1st_genre.png')
+
+
+    def plot_zipf_law(self, df: pd.DataFrame) -> None:
+        """Appliquer la loi de Zipf sur le corpus et tracer le graphique
+
+        Parameters
+        ----------
+        df : DataFrame
+            Le corpus en dataframe obtenu avec get_dataframe
+        
+        Returns
+        -------
+        None
+        """
+        # combiner tous les synopsis en une seule grande chaîne de caractères
+        all_synopsis = " ".join(df['synopsis'].tolist()).lower()
+        # tokeniser les mots (split sur les espaces)
+        tokens = all_synopsis.split()
+        # compter les fréquences des mots
+        word_counts = Counter(tokens)
+        # trier les mots par fréquence décroissante
+        sorted_word_counts = word_counts.most_common()
+        # extraire les fréquences
+        frequencies = [count for word, count in sorted_word_counts]
+        # calculer les rangs
+        ranks = np.arange(1, len(frequencies) + 1)
+        # plotting
+        plt.figure(figsize=(10, 6))
+        plt.loglog(ranks, frequencies, marker=".")
+        plt.title("Loi de Zipf sur les synopsis")
+        plt.xlabel("Rang")
+        plt.ylabel("Fréquence")
+        plt.grid(True)
+        plt.tight_layout()
+        plt.savefig(self.path_plot + 'zipf_law.png')
+
+    def all_plots(self):
+        """
+        Obtenir tous les plots disponibles
+        """
+        df = self.get_dataframe()
+        self.plot_flat_genre_distribution(df)
+        self.plot_grouped_genre_distribution(df)
+        self.plot_1st_genre_distribution(df)
+        self.plot_avg_token_per_genre(df)
+        self.plot_avg_token_per_1st_genre(df)
+        self.plot_zipf_law(df)
+
+
 def main():
     """
     main
@@ -171,10 +279,7 @@ def main():
     args = parser.parse_args()
 
     plotter = Plotter(args.path_corpus, args.path_plot)
-    df = plotter.get_dataframe()
-    plotter.plot_flat_genre_distribution(df)
-    plotter.plot_grouped_genre_distribution(df)
-    plotter.plot_1st_genre_distribution(df)
+    plotter.all_plots()
     print('Plotting effectué !')
 
 if __name__ == '__main__':
