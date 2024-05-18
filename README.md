@@ -12,6 +12,7 @@ Projet de constitution/exploitation de corpus dans le cadre du cours d'Outils de
     - et pour Ammok/movie-genre-classification
 
 - Informations sur le corpus :
+    - langue : anglais
 
     - champs :
         - id : int
@@ -28,7 +29,22 @@ Projet de constitution/exploitation de corpus dans le cadre du cours d'Outils de
 Créateur du corpus : datadrivenscience/
 
 ## Création du nouveau corpus
-- scraping de du site d'IMDB avec selenium
+- scraping du site d'IMDB avec selenium
 - création de dataclass pour stocker les données
 - sérialisation en JSON
-- plotting du corpus obtenu avec 3 figures disponibles dans plots/
+- plotting du corpus obtenu avec 6 figures disponibles dans plots/
+- suppression des genres trop peu dotés (si n<20) + suppression des colonnes inutiles
+- split en train/test/dev
+- création de la carte YAML du dataset
+
+## Instructions pour reproduire le dataset
+- cloner le dépôt
+- lancer main.py
+- puis lancer split_dataset.py
+
+- s'assurer d'avoir un dossier data/ contenant les dossiers raw/ et split/ pour pouvoir lancer les commandes avec les paths par défauts
+- s'assurer d'avoir installé tous les requirements (voir requirements.txt)
+
+- vous obtiendrez ainsi :
+    - les datasets dans data/
+    - les plots dans plots/
