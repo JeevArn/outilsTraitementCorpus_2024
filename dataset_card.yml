@@ -1,0 +1,75 @@
+---
+task_categories:
+- text classification
+language:
+- french
+pretty_name: IMDB movie synopsis dataset
+size_categories:
+- 100K<n<1M
+---
+
+# Dataset Card for Dataset Name
+
+Ce dataset est constitué de synopsis de films pour la classification en genres, scrappé depuis la page web du Top 250 d'IMDb.
+
+## Dataset Details
+
+### Dataset Description
+
+corpus:
+  description: "Corpus de synopsis de films pour la classification en genres"
+  format: "JSON"
+
+  columns (processed version):
+    - name: "id"
+      type: "string"
+      description: "Identifiant unique du film"
+    - name: "synopsis"
+      type: "string"
+      description: "Synopsis du film"
+    - name: "genres"
+      type: "str"
+      description: "Genre principal du film"
+
+  columns (raw version):
+    - name: "id"
+      type: "string"
+      description: "Identifiant unique du film"
+    - name: "title"
+      type: "string"
+      description: "Titre du film"
+    - name: "og_title"
+      type: "string"
+      description: "Titre original du film (non traduit)"
+    - name: "year"
+      type: "string"
+      description: "Année de sortie du film"
+    - name: "genres"
+      type: "list"
+      description: "Liste des genres du film"
+    - name: "director"
+      type: "string"
+      description: "Réalisateur du film"
+    - name: "synopsis"
+      type: "string"
+      description: "Synopsis du film"
+    - name: "analysis"
+      type: "list"
+      description: "Pos-tagging avec SpaCy"
+
+- **Curated by:** Jeevya AROUN
+- **Language(s) (NLP):** French
+
+## Uses
+
+Ce dataset peut servir à faire un modèle de classification des synopsis de films en fonction du genre.
+
+## Dataset Creation
+
+### Source Data
+
+Le dataset est issu de la page web du Top 250 d'IMDb en version fr : https://www.imdb.com/chart/top/?ref_=nv_mv_250
+
+#### Data Collection and Processing
+
+L'extraction des données a été effectuée avec Selenium.
