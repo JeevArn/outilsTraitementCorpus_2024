@@ -8,9 +8,10 @@ commande avec les path par défaut :
 """
 import argparse
 import pandas as pd
+from pandas import DataFrame
 from sklearn.model_selection import train_test_split
 
-def load_data(file_path):
+def load_data(file_path: str)-> DataFrame:
     """Charge les données à partir d'un fichier JSON en DataFrame
     
     Parameters
@@ -25,7 +26,7 @@ def load_data(file_path):
     """
     return pd.read_json(file_path)
 
-def preprocess_data(df):
+def preprocess_data(df: DataFrame)-> DataFrame:
     """Prétraite les données en supprimant les colonnes inutiles, 
     en supprimant les doublons de synopsis, 
     en conservant uniquement le genre principale de chaque film
@@ -53,7 +54,7 @@ def preprocess_data(df):
     df = df[~df['genres'].isin(underrep_genres)]
     return df
 
-def split_data(df):
+def split_data(df: DataFrame)-> DataFrame:
     """Divise les données en train, test et dev
     
     Parameters
@@ -84,7 +85,7 @@ def split_data(df):
                                        shuffle=True)
     return train_df, test_df, dev_df
 
-def save_data(df, file_path):
+def save_data(df: DataFrame, file_path: str)-> None:
     """Enregistre le DataFrame en tant que fichier JSON
     
     Parameters
